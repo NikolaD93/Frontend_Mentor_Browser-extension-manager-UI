@@ -64,6 +64,10 @@ body {
   font-family: var(--font-family-regular);
 }
 
+a {
+  color: var(--color-text);
+}
+
 .container {
   width: 65%;
   margin: 0 auto;
@@ -155,6 +159,11 @@ nav a {
   background-color: var(--color-neutral-0);
   border-radius: var(--border-radius-xl);
   border: 2px solid var(--color-neutral-100);
+  transition: var(--transition);
+}
+
+.extension:hover {
+  border: 2px solid var(--color-text);
 }
 
 .extension-content {
@@ -244,4 +253,14 @@ input:checked + .slider:before {
 
 .slider.round:before {
   border-radius: 50%;
+}
+
+.extensions-count {
+  font-family: var(--font-family-bold);
+}
+
+.attribution {
+  text-align: center;
+  margin-top: 60px;
+  font-family: var(--font-family-medium);
 }
