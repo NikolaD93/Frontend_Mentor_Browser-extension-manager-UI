@@ -57,14 +57,15 @@ body.dark {
 }
 
 body {
-  height: 100vh;
+  /* height: 100vh; */
+  padding-bottom: 80px;
   background: var(--color-gradient);
   color: var(--color-text);
   font-family: var(--font-family-regular);
 }
 
 .container {
-  width: 80%;
+  width: 65%;
   margin: 0 auto;
 }
 
@@ -110,24 +111,24 @@ nav a {
   gap: 10px;
 }
 
-.filter-section .btn {
+.btn {
   padding: 8px 20px;
   border-radius: 40px;
   font-size: 1.15rem;
+  font-family: var(--font-family-medium);
   outline: none;
   background-color: var(--color-neutral-0);
   color: var(--color-text);
-  font-family: inherit;
   border: 2px solid var(--color-neutral-100);
   transition: var(--transition);
   cursor: pointer;
 }
 
-.filter-section .btn:hover {
+.btn:hover {
   background-color: var(--color-red-400);
 }
 
-.filter-section .btn:focus {
+.btn:focus {
   outline: 2px solid var(--color-red-400);
 }
 
@@ -138,4 +139,109 @@ nav a {
     flex-direction: column;
     gap: 20px;
   }
+}
+
+.extensions-wrapper {
+  display: flex;
+  justify-content: space-between;
+  gap: 15px;
+  flex-wrap: wrap;
+  padding-bottom: 40px;
+}
+
+.extension {
+  width: 32.5%;
+  padding: 10px 15px;
+  background-color: var(--color-neutral-0);
+  border-radius: var(--border-radius-xl);
+  border: 2px solid var(--color-neutral-100);
+}
+
+.extension-content {
+  display: flex;
+  gap: 15px;
+  margin-bottom: 40px;
+}
+
+.extension-content img {
+  aspect-ratio: 1 / 1;
+}
+
+.extension-content .extension-text h4 {
+  font-family: var(--font-family-bold);
+  font-size: 1.15rem;
+  line-height: 2rem;
+}
+
+.extension-content .extension-text p {
+  max-width: 300px;
+  opacity: 0.6;
+}
+
+.extension-actions {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+}
+
+@media screen and (max-width: 768px) {
+  .extension {
+    width: 100%;
+  }
+}
+
+/* Copied from: https://www.w3schools.com/howto/tryit.asp?filename=tryhow_css_switch */
+.switch {
+  position: relative;
+  display: inline-block;
+  width: 45px;
+  height: 22px;
+}
+
+.switch input {
+  opacity: 0;
+  width: 0;
+  height: 0;
+}
+
+.slider {
+  position: absolute;
+  cursor: pointer;
+  top: 0;
+  left: 0;
+  right: 0;
+  bottom: 0;
+  background-color: var(--color-neutral-300);
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+.slider:before {
+  position: absolute;
+  content: "";
+  height: 16px;
+  width: 16px;
+  left: 4px;
+  bottom: 3px;
+  background-color: hsl(200, 60%, 99%);
+  -webkit-transition: 0.3s;
+  transition: 0.3s;
+}
+
+input:checked + .slider {
+  background-color: var(--color-red-400);
+}
+
+input:checked + .slider:before {
+  -webkit-transform: translateX(20px);
+  -ms-transform: translateX(20px);
+  transform: translateX(20px);
+}
+
+.slider.round {
+  border-radius: 34px;
+}
+
+.slider.round:before {
+  border-radius: 50%;
 }
