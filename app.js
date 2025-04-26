@@ -9,6 +9,8 @@ const btnInactiveElement = document.querySelector("#btn-inactive");
 const extensionsWrapperElement = document.querySelector('#extensions-wrapper');
 const extensionsCountElement = document.querySelector('#extensions-count');
 
+const loaderElement = document.querySelector('#loader');
+
 toggleIconElement.addEventListener('click', handleThemeToggle);
 
 function handleThemeToggle() {
@@ -26,22 +28,39 @@ function handleThemeToggle() {
 }
 
 let extensionsData = [];
+let isLoading = false;
 
 async function fetchData() {
     try {
+        isLoading = true;
+        renderExtensions();
+
         const response = await fetch('./data.json');
         const data = await response.json();
         extensionsData = data;
+        isLoading = false;
 
-        renderExtensions();
+        setTimeout(() => {
+            renderExtensions();
+        }, 1500);
     } catch (error) {
         console.error(error);
+        isLoading = false;
     }
 }
 
+
 function renderExtensions(data) {
-    data = data || extensionsData
-    extensionsWrapperElement.innerHTML = ''
+    if (isLoading) {
+        loaderElement.classList.remove('hidden');
+        extensionsWrapperElement.innerHTML = '';
+        return;
+    } else {
+        loaderElement.classList.add('hidden');
+    }
+
+    data = data || extensionsData;
+    extensionsWrapperElement.innerHTML = '';
 
     if (data.length === 0) {
         extensionsWrapperElement.innerHTML = "<p>No extensions available.</p>";
@@ -53,41 +72,38 @@ function renderExtensions(data) {
         extension.className = 'extension';
 
         extension.innerHTML = `
-            <div class="extension-content">
-                <img
-                class="extension-img"
-                src="${item.logo}"
-                alt="extension-icon"
-                />
-                <div class="extension-text">
-                <h4>${item.name}</h4>
-                <p>${item.description}</p>
+                <div class="extension-content">
+                    <img class="extension-img" src="${item.logo}" alt="extension-icon"/>
+                    <div class="extension-text">
+                        <h4>${item.name}</h4>
+                        <p>${item.description}</p>
+                    </div>
                 </div>
-            </div>
-            <div class="extension-actions">
-                <button class="btn" onClick="handleDelete(${idx})">Remove</button>
-                <label class="switch">
-                <input type="checkbox" onchange="handleCheckboxChange(event, ${idx})" ${item.isActive ? "checked" : null}/>
-                <span class="slider round"></span>
-                </label>
-            </div>
-        `;
+                <div class="extension-actions">
+                    <button class="btn" onClick="handleDelete(${idx})">Remove</button>
+                    <label class="switch">
+                        <input type="checkbox" onchange="handleCheckboxChange(event, ${idx})" ${item.isActive ? "checked" : ""}/>
+                        <span class="slider round"></span>
+                    </label>
+                </div>
+            `;
 
         extensionsWrapperElement.appendChild(extension);
-        extensionsCountElement.textContent = `Total extensions (${data.length})`
     });
+
+    extensionsCountElement.textContent = `Total extensions (${data.length})`;
 }
 
 fetchData();
 
 function handleCheckboxChange(e, id) {
-    extensionsData[id].isActive = e.target.checked
-    renderExtensions()
+    extensionsData[id].isActive = e.target.checked;
+    renderExtensions();
 }
 
 function handleDelete(id) {
-    extensionsData.splice(id, 1)
-    renderExtensions()
+    extensionsData.splice(id, 1);
+    renderExtensions();
 }
 
 function resetFilterActiveClass() {
@@ -99,19 +115,19 @@ function resetFilterActiveClass() {
 btnAllElement.addEventListener('click', () => {
     resetFilterActiveClass();
     btnAllElement.classList.add('filter-active');
-    renderExtensions(extensionsData)
-})
+    renderExtensions(extensionsData);
+});
 
 btnActiveElement.addEventListener('click', () => {
     resetFilterActiveClass();
     btnActiveElement.classList.add('filter-active');
-    const activeElements = extensionsData.filter(data => data.isActive === true)
-    renderExtensions(activeElements)
-})
+    const activeElements = extensionsData.filter(data => data.isActive === true);
+    renderExtensions(activeElements);
+});
 
 btnInactiveElement.addEventListener('click', () => {
     resetFilterActiveClass();
     btnInactiveElement.classList.add('filter-active');
-    const inactiveElements = extensionsData.filter(data => data.isActive === false)
-    renderExtensions(inactiveElements)
-})
+    const inactiveElements = extensionsData.filter(data => data.isActive === false);
+    renderExtensions(inactiveElements);
+});
