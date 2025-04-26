@@ -136,6 +136,10 @@ nav a {
   outline: 2px solid var(--color-red-400);
 }
 
+.filter-active {
+  background-color: var(--color-red-400);
+}
+
 @media screen and (max-width: 768px) {
   .filter-section {
     margin-top: 40px;

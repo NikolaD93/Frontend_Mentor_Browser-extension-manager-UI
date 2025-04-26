@@ -2,6 +2,10 @@ const toggleIconElement = document.querySelector('#toggle-icon');
 const toggleIconImageElement = document.querySelector('#toggle-icon-image');
 const extensionsLogoElement = document.querySelector('#extensions-logo');
 
+const btnAllElement = document.querySelector("#btn-all");
+const btnActiveElement = document.querySelector("#btn-active");
+const btnInactiveElement = document.querySelector("#btn-inactive");
+
 const extensionsWrapperElement = document.querySelector('#extensions-wrapper');
 const extensionsCountElement = document.querySelector('#extensions-count');
 
@@ -35,9 +39,16 @@ async function fetchData() {
     }
 }
 
-function renderExtensions() {
+function renderExtensions(data) {
+    data = data || extensionsData
     extensionsWrapperElement.innerHTML = ''
-    extensionsData.forEach((item, idx) => {
+
+    if (data.length === 0) {
+        extensionsWrapperElement.innerHTML = "<p>No extensions available.</p>";
+        return;
+    }
+
+    data.forEach((item, idx) => {
         const extension = document.createElement('div');
         extension.className = 'extension';
 
@@ -63,7 +74,7 @@ function renderExtensions() {
         `;
 
         extensionsWrapperElement.appendChild(extension);
-        extensionsCountElement.textContent = `Total extensions (${extensionsData.length})`
+        extensionsCountElement.textContent = `Total extensions (${data.length})`
     });
 }
 
@@ -71,6 +82,7 @@ fetchData();
 
 function handleCheckboxChange(e, id) {
     extensionsData[id].isActive = e.target.checked
+    renderExtensions()
 }
 
 function handleDelete(id) {
@@ -78,5 +90,28 @@ function handleDelete(id) {
     renderExtensions()
 }
 
+function resetFilterActiveClass() {
+    btnAllElement.classList.remove('filter-active');
+    btnActiveElement.classList.remove('filter-active');
+    btnInactiveElement.classList.remove('filter-active');
+}
 
+btnAllElement.addEventListener('click', () => {
+    resetFilterActiveClass();
+    btnAllElement.classList.add('filter-active');
+    renderExtensions(extensionsData)
+})
 
+btnActiveElement.addEventListener('click', () => {
+    resetFilterActiveClass();
+    btnActiveElement.classList.add('filter-active');
+    const activeElements = extensionsData.filter(data => data.isActive === true)
+    renderExtensions(activeElements)
+})
+
+btnInactiveElement.addEventListener('click', () => {
+    resetFilterActiveClass();
+    btnInactiveElement.classList.add('filter-active');
+    const inactiveElements = extensionsData.filter(data => data.isActive === false)
+    renderExtensions(inactiveElements)
+})
